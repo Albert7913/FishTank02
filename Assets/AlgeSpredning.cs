@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // gør IEnumerator tilgængelig
 
 public class AlgeSpredning : MonoBehaviour
 {
@@ -6,7 +7,8 @@ public class AlgeSpredning : MonoBehaviour
    [SerializeField] private GameObject algePrik;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
- void Start()
+    //IEnumarator gør at koden kan holde pause og starte bagefter
+ IEnumerator Start()
  {
      // Vælger størrelsen på cirklen én gang for hele algepletten.
      float radius = Random.Range(1f, 3f);
@@ -21,6 +23,9 @@ public class AlgeSpredning : MonoBehaviour
          // Opretter en kopi af algeprikken på punktet uden rotation.
          //https://docs.unity.com/en-us/engine/6000.0/script-reference/unityengine/object/instantiate
          Instantiate(algePrik, new Vector3(punkt.x, punkt.y, 0f), Quaternion.identity);
+         // Venter et halvt sekund, før løkken fortsætter.
+         //https://docs.unity.com/en-us/engine/6000.0/script-reference/unityengine/waitforseconds
+         yield return new WaitForSeconds(0.5f);
      }
  }
 }
