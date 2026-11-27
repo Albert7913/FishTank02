@@ -6,6 +6,13 @@ public class AlgeSpredning : MonoBehaviour
     // I Inspector trækkes AlgeDot-prefabben ind i feltet Alge Prik.
     [SerializeField] private GameObject algePrik;
 
+    // I Inspector tilknyttes akvariets fire vægge.
+    // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/SerializeField.html
+    [SerializeField] private SpriteRenderer Left_wall;
+    [SerializeField] private SpriteRenderer Right_wall;
+    [SerializeField] private SpriteRenderer Bund_wall;
+    [SerializeField] private SpriteRenderer Top_wall;
+
     // Start kører ved spilstart.
     // IEnumerator gør, at metoden kan holde pause og fortsætte bagefter.
     IEnumerator Start()
@@ -31,9 +38,28 @@ public class AlgeSpredning : MonoBehaviour
                 // Finder et nyt tilfældigt punkt omkring plettens centrum.
                 Vector2 punkt = centrum + Random.insideUnitCircle * radius;
 
-                // Opretter en kopi af algeprikken på punktet uden rotation.
+                // Opretter en grøn prik og gemmer en reference til kopien.
                 // https://docs.unity.com/en-us/engine/6000.0/script-reference/unityengine/object/instantiate
-                Instantiate(algePrik, new Vector3(punkt.x, punkt.y, 0f), Quaternion.identity);
+                GameObject nyPrik = Instantiate(
+                    algePrik,
+                    new Vector3(punkt.x, punkt.y, 0f),
+                    Quaternion.identity
+                );
+
+                // Henter den nye priks Sprite Renderer og dens yderkanter.
+                // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/GameObject.GetComponent.html
+                // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Renderer-bounds.html
+                Bounds prikKanter = nyPrik.GetComponent<SpriteRenderer>().bounds;
+
+                // Fjerner prikken, hvis den rager ud over en af væggenes indvendige kanter.
+                // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Object.Destroy.html
+                if (prikKanter.min.x < Left_wall.bounds.max.x ||
+                    prikKanter.max.x > Right_wall.bounds.min.x ||
+                    prikKanter.min.y < Bund_wall.bounds.max.y ||
+                    prikKanter.max.y > Top_wall.bounds.min.y)
+                {
+                    Destroy(nyPrik);
+                }
 
                 // Venter et halvt sekund, før løkken fortsætter.
                 // https://docs.unity.com/en-us/engine/6000.0/script-reference/unityengine/waitforseconds
