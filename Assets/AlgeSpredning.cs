@@ -28,6 +28,20 @@ public class AlgeSpredning : MonoBehaviour
             // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Random-insideUnitCircle.html
             centrum = centrum + Random.insideUnitCircle * 2f;
 
+            // Holder centrum mellem væggenes indvendige kanter.
+            // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Mathf.Clamp.html
+            centrum.x = Mathf.Clamp(
+                centrum.x,
+                Left_wall.bounds.max.x,
+                Right_wall.bounds.min.x
+            );
+
+            centrum.y = Mathf.Clamp( //hold tallet mellem en nedre og en øvre grænse
+                centrum.y,
+                Bund_wall.bounds.max.y,
+                Top_wall.bounds.min.y
+            );
+
             // Vælger størrelsen på cirklen én gang for denne algeplet.
             float radius = Random.Range(1f, 3f);
 
