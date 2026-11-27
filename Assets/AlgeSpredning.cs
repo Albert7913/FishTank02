@@ -17,12 +17,16 @@ public class AlgeSpredning : MonoBehaviour
     // IEnumerator gør, at metoden kan holde pause og fortsætte bagefter.
     IEnumerator Start()
     {
-        // Udgangspunktet for at finde algepletternes centrum er (0, 0).
-        Vector2 centrum = Vector2.zero;
+        // Vælger et tilfældigt udgangspunkt inden for akvariets indvendige kanter.
+        // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Random.Range.html
+        Vector2 centrum = new Vector2(
+            Random.Range(Left_wall.bounds.max.x, Right_wall.bounds.min.x),// hvor langt til venstre eller højre
+            Random.Range(Bund_wall.bounds.max.y, Top_wall.bounds.min.y) // hvor højt eller lavt 
+        );
 
-        // Laver to algepletter efter hinanden.
-        // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements#the-for-statement
-        for (int plet = 0; plet < 2; plet++)
+        // Bliver ved med at lave nye algepletter, mens spillet kører.
+        // https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements#the-while-statement
+        while (true)
         {
             // Vælger et nyt centrum højst 2 Unity-enheder fra det forrige.
             // https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Random-insideUnitCircle.html
